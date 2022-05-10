@@ -2,12 +2,14 @@
 import { useEffect, useState } from "react";
 
 // Project files
-import iTodo from "interfaces/iTodo";
+import TaskItem from "component/TaskItem";
+import iTask from "interfaces/iTask";
+import eStatus from "interfaces/eStatus";
 
 export default function App() {
   // Local state
-  const [todos, setTodos] = useState(Array<iTodo>());
-  const [status, setStatus] = useState(0); // <= bad, 0: loading, 1: loaded, 2: error
+  const [tasks, setTasks] = useState(Array<iTask>());
+  const [status, setStatus] = useState(eStatus.Loading);
 
   // Properties
   const path: string = "https://jsonplaceholder.typicode.com/todos";
@@ -24,24 +26,34 @@ export default function App() {
     loadData(path);
   }, []);
 
-  function onSucess(data: iTodo[]): void {
-    setTodos(data);
-    setStatus(1);
+  function onSucess(data: iTask[]): void {
+    setTasks(data);
+    setStatus(eStatus.Loaded);
   }
 
   function onFail(): void {
     alert("We cannot load the todos");
-    setStatus(2);
+    setStatus(eStatus.Error);
   }
 
+  function onChange(): void {
+    alert("You click on me!!!");
+  }
+
+  // Components
+  const Tasks = tasks.map((item) => (
+    <TaskItem key={item.id} item={item} onChange={onChange} />
+  ));
+
   // Safeguards
-  if (status === 0) return <p>⏱</p>;
-  if (status === 2) return <p>❌</p>;
+  if (status === eStatus.Loading) return <p>⏱</p>;
+  if (status === eStatus.Error) return <p>❌</p>;
 
   return (
     <div className="App">
       <h1>Fetch todo in TypeScript</h1>
-      <p>Number of items: @{todos.length}@</p>
+      <p>Number of items: {tasks.length}</p>
+      <ol>{Tasks}</ol>
     </div>
   );
 }
