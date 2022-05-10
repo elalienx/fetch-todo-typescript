@@ -12,7 +12,11 @@ export default function TaskItem({ item, onChange }: props) {
   return (
     <li className="task-item">
       {title}
-      <input type="checkbox" checked={completed} onChange={() => onChange()} />
+      <input
+        type="checkbox"
+        checked={completed}
+        onChange={() => onChange(title)}
+      />
     </li>
   );
 }

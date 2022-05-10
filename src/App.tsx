@@ -36,8 +36,8 @@ export default function App() {
     setStatus(eStatus.Error);
   }
 
-  function onChange(): void {
-    alert("You click on me!!!");
+  function onChange(message: string): void {
+    alert(message);
   }
 
   // Components
